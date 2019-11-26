@@ -19,6 +19,7 @@ public @interface DialogAnnotation {
     int softInputMode() default WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN;
     int dialogWidth() default WindowManager.LayoutParams.WRAP_CONTENT;
     int dialogHeight() default WindowManager.LayoutParams.WRAP_CONTENT;
+    int horMargin() default 0;
     int layoutId() default 0;
     int windowAnimations() default 0;
 }

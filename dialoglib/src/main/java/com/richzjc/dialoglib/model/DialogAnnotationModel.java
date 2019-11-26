@@ -1,12 +1,14 @@
 package com.richzjc.dialoglib.model;
 
 
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.WindowManager;
 
 import com.richzjc.dialoglib.R;
 import com.richzjc.dialoglib.anotation.DialogAnnotation;
 import com.richzjc.dialoglib.base.BaseDialogFragment;
+import com.richzjc.dialoglib.util.ScreenUtil;
 
 public class DialogAnnotationModel {
 
@@ -49,8 +51,13 @@ public class DialogAnnotationModel {
     }
 
     public int getDialogWidth(){
-        if(annotation != null)
-            return annotation.dialogWidth();
+        if(annotation != null) {
+            if(annotation.dialogWidth() == WindowManager.LayoutParams.MATCH_PARENT  &&  annotation.horMargin() > 0){
+                return ScreenUtil.getScreenWidth(dialogFragment.getContext()) - ScreenUtil.dip2px(annotation.horMargin(), dialogFragment.getContext());
+            }else {
+                return annotation.dialogWidth();
+            }
+        }
         return dialogFragment.getDialogWidth();
     }
 
