@@ -3,7 +3,6 @@ package com.richzjc.test
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import butterknife.ButterKnife
 import com.richzjc.dialoglib.anotation.DialogAnnotation
 import com.richzjc.dialoglib.base.BaseDialogFragment
 
