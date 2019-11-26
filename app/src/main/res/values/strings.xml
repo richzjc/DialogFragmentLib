@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="alien_user_privacy_title">用户隐私政策概要</string>
+    <string name="alien_user_privacy_content">我们希望通过《华尔街见闻隐私政策》，向您说明您在使用我们的服务时如何收集、存储、使用及对外提供您的个人信息。本隐私政策与您使用华尔街见闻服务关系密切，我们建议您仔细阅读并理解本隐私政策全部内容，做出您认为适当的选择。我们努力用通俗易懂、简明扼要的文字表达阐明本隐私政策。</string>
+    <string name="alien_user_privacy_hint">您可以点击下方链接阅读完整的</string>
+    <string name="alien_user_privacy_click_desc">《华尔街见闻隐私政策》</string>
+    <string name="alien_user_privacy_agree">我同意</string>
+    <string name="alien_user_privacy_not_agree">暂不使用</string>
+    <string name="alien_user_privacy_not_agree_hint">需要您同意后才可继续使用华尔街见闻提供的服务</string>
+</resources>
