@@ -1,0 +1,2 @@
+# DialogFragmentLib
+通过注解的方式来创建Dialog，使得代码量更少更清晰明了
