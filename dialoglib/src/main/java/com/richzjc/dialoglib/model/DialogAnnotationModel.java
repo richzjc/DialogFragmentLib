@@ -1,13 +1,14 @@
 package com.richzjc.dialoglib.model;
 
 
-import android.util.DisplayMetrics;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.WindowManager;
 
 import com.richzjc.dialoglib.R;
 import com.richzjc.dialoglib.anotation.DialogAnnotation;
 import com.richzjc.dialoglib.base.BaseDialogFragment;
+import com.richzjc.dialoglib.util.DialogReflectUtil;
 import com.richzjc.dialoglib.util.ScreenUtil;
 
 public class DialogAnnotationModel {
@@ -22,13 +23,13 @@ public class DialogAnnotationModel {
 
     public int getStyle(){
         if(annotation != null)
-            return annotation.style();
+            return DialogReflectUtil.getId(dialogFragment.getContext(), "style", annotation.styleName());
         return dialogFragment.getStyle();
     }
 
     public int getLayoutId(){
         if(annotation != null)
-            return annotation.layoutId();
+            return DialogReflectUtil.getId(dialogFragment.getContext(), "layout", annotation.layoutName());
         return dialogFragment.doGetContentViewId();
     }
 
@@ -68,8 +69,8 @@ public class DialogAnnotationModel {
     }
 
     public int getWindowAnimations(){
-        if(annotation != null && annotation.windowAnimations() != 0)
-            return annotation.windowAnimations();
+        if(annotation != null && !TextUtils.isEmpty(annotation.windowAnimationsName()))
+            return DialogReflectUtil.getId(dialogFragment.getContext(), "anim", annotation.windowAnimationsName());
         else{
            return getAnimationId();
         }

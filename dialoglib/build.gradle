@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.jakewharton.butterknife'
 
 apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
@@ -19,7 +18,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.0'
         classpath 'com.novoda:bintray-release:0.9.1'
     }
 }
@@ -55,7 +53,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation 'androidx.appcompat:appcompat:1.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

@@ -1,2 +1,2 @@
-include ':app', ':library', ':dialoglib'
+include ':app', ':library', ':dialoglib', ':test'
 rootProject.name='My Application'
