@@ -2,7 +2,6 @@ package com.richzjc.test
 
 import android.util.Log
 import android.view.Gravity
-import android.view.View
 import com.richzjc.dialoglib.anotation.DialogAnnotation
 import com.richzjc.dialoglib.base.BaseDialogFragment
 
@@ -14,9 +13,5 @@ class Test2Dialog : BaseDialogFragment() {
 
     override fun doInitData() {
         Log.i("tag", "doInitData")
-    }
-
-    override fun doInitSubViews(view: View?) {
-        super.doInitSubViews(view)
     }
 }
