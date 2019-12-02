@@ -6,7 +6,7 @@ publish {
     userOrg = 'richzjc'
     groupId = 'com.richzjc'
     artifactId = 'DialogLib'
-    publishVersion = '1.0.2'
+    publishVersion = '1.0.3'
     desc = 'create DialogFragment by DialogAnnotation'
     website = 'https://github.com/novoda/bintray-release'
 }

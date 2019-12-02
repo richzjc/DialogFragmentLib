@@ -52,7 +52,7 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
     }
 
     public int getGravity() {
-        return Gravity.BOTTOM;
+        return Gravity.CENTER;
     }
 
     @Override
