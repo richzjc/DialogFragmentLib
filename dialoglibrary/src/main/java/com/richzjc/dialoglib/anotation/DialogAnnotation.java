@@ -24,6 +24,5 @@ public @interface DialogAnnotation {
     int dialogWidth() default WindowManager.LayoutParams.WRAP_CONTENT;
     int dialogHeight() default WindowManager.LayoutParams.WRAP_CONTENT;
     int horMargin() default 0;
-    String layoutName() default "";
     String windowAnimationsName() default "";
 }

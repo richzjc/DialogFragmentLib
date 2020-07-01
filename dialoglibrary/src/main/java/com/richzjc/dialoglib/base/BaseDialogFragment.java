@@ -70,11 +70,13 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LayoutInflater mInflater = LayoutInflater.from(getContext());
         mInflater = mInflater.cloneInContext(getContext());
-        View containerView = mInflater.inflate(model.getLayoutId(), container, false);
+        View containerView = mInflater.inflate(doGetContentViewId(), container, false);
         doBefore(savedInstanceState);
         doInitSubViews(containerView);
         return containerView;
     }
+
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -116,11 +118,6 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
     @Override
     public ViewGroup doViewGroupRoot() {
         return null;
-    }
-
-    @Override
-    public int doGetContentViewId() {
-        return 0;
     }
 
     @Override

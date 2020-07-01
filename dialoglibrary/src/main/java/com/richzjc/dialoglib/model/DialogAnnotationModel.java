@@ -27,12 +27,6 @@ public class DialogAnnotationModel {
         return dialogFragment.getStyle();
     }
 
-    public int getLayoutId(){
-        if(annotation != null)
-            return DialogReflectUtil.getId(dialogFragment.getContext(), "layout", annotation.layoutName());
-        return dialogFragment.doGetContentViewId();
-    }
-
     public int getGravity(){
         if(annotation != null)
             return annotation.gravity();
