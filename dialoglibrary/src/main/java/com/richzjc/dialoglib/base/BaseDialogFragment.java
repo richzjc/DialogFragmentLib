@@ -1,5 +1,6 @@
 package com.richzjc.dialoglib.base;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -12,10 +13,15 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleRegistry;
+import androidx.lifecycle.OnLifecycleEvent;
 
 import com.richzjc.dialoglib.callback.ICreateViewInterface;
 import com.richzjc.dialoglib.model.DialogAnnotationModel;
@@ -55,14 +61,36 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
         return Gravity.CENTER;
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onStart() {
-        super.onStart();
         try {
-            getDialog().getWindow().setLayout(model.getDialogWidth(), model.getDialogHeight());
+            Activity activity = getActivity();
+            if (activity != null && activity instanceof ComponentActivity) {
+                LifecycleRegistry lifecycleRegistry = (LifecycleRegistry) ((ComponentActivity) activity).getLifecycle();
+                Lifecycle.State state = lifecycleRegistry.getCurrentState();
+                if(state == Lifecycle.State.DESTROYED || activity.isDestroyed()|| activity.isFinishing())
+                    return;
+
+                else if(state == Lifecycle.State.RESUMED){
+                    realStart();
+                }else{
+                    lifecycleRegistry.addObserver(new LifecycleObserver() {
+                        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+                        public void onResumeMethod(){
+                            realStart();
+                        }
+                    });
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void realStart(){
+        super.onStart();
+        getDialog().getWindow().setLayout(model.getDialogWidth(), model.getDialogHeight());
     }
 
     @Nullable
@@ -75,7 +103,6 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
         doInitSubViews(containerView);
         return containerView;
     }
-
 
 
     @Override
@@ -146,18 +173,32 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
     }
 
     @Override
-    public void show(FragmentManager manager, String tag) {
+    public void show(final FragmentManager manager, final String tag) {
         try {
-            Context context = getContext();
-            if (context instanceof Activity) {
-                Activity activity = (Activity) context;
-                if (!activity.isDestroyed() && !activity.isFinishing())
-                    super.show(manager, tag);
-            } else {
-                super.show(manager, tag);
+            Activity activity = getActivity();
+            if (activity != null && activity instanceof ComponentActivity) {
+                LifecycleRegistry lifecycleRegistry = (LifecycleRegistry) ((ComponentActivity) activity).getLifecycle();
+                Lifecycle.State state = lifecycleRegistry.getCurrentState();
+                if(state == Lifecycle.State.DESTROYED || activity.isDestroyed()|| activity.isFinishing())
+                    return;
+
+                else if(state == Lifecycle.State.RESUMED){
+                    realShowDialog(manager, tag);
+                }else{
+                    lifecycleRegistry.addObserver(new LifecycleObserver() {
+                        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+                        public void onResumeMethod(){
+                           realShowDialog(manager, tag);
+                        }
+                    });
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void realShowDialog(FragmentManager manager, String tag){
+        super.show(manager, tag);
     }
 }
