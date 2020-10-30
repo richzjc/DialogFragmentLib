@@ -69,18 +69,13 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
             if (activity != null && activity instanceof ComponentActivity) {
                 LifecycleRegistry lifecycleRegistry = (LifecycleRegistry) ((ComponentActivity) activity).getLifecycle();
                 Lifecycle.State state = lifecycleRegistry.getCurrentState();
-                if(state == Lifecycle.State.DESTROYED || activity.isDestroyed()|| activity.isFinishing())
+                if (state == Lifecycle.State.DESTROYED || activity.isDestroyed() || activity.isFinishing())
                     return;
 
-                else if(state == Lifecycle.State.RESUMED){
+                else if (state == Lifecycle.State.RESUMED) {
                     realStart();
-                }else{
-                    lifecycleRegistry.addObserver(new LifecycleObserver() {
-                        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-                        public void onResumeMethod(){
-                            realStart();
-                        }
-                    });
+                } else if (lifecycleRegistry instanceof BaseLifecycleRegistry && ((BaseLifecycleRegistry) lifecycleRegistry).smallerEvent(Lifecycle.Event.ON_PAUSE)) {
+                    realStart();
                 }
             }
         } catch (Exception e) {
@@ -88,7 +83,7 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
         }
     }
 
-    private void realStart(){
+    private void realStart() {
         super.onStart();
         getDialog().getWindow().setLayout(model.getDialogWidth(), model.getDialogHeight());
     }
@@ -175,30 +170,16 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
     @Override
     public void show(final FragmentManager manager, final String tag) {
         try {
-            Activity activity = getActivity();
-            if (activity != null && activity instanceof ComponentActivity) {
-                LifecycleRegistry lifecycleRegistry = (LifecycleRegistry) ((ComponentActivity) activity).getLifecycle();
-                Lifecycle.State state = lifecycleRegistry.getCurrentState();
-                if(state == Lifecycle.State.DESTROYED || activity.isDestroyed()|| activity.isFinishing())
-                    return;
-
-                else if(state == Lifecycle.State.RESUMED){
-                    realShowDialog(manager, tag);
-                }else{
-                    lifecycleRegistry.addObserver(new LifecycleObserver() {
-                        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-                        public void onResumeMethod(){
-                           realShowDialog(manager, tag);
-                        }
-                    });
-                }
+            Context context = getContext();
+            if (context instanceof Activity) {
+                Activity activity = (Activity) context;
+                if (!activity.isDestroyed() && !activity.isFinishing())
+                    super.show(manager, tag);
+            } else {
+                super.show(manager, tag);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void realShowDialog(FragmentManager manager, String tag){
-        super.show(manager, tag);
     }
 }
