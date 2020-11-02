@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -26,18 +28,31 @@ import androidx.lifecycle.OnLifecycleEvent;
 import com.richzjc.dialoglib.callback.ICreateViewInterface;
 import com.richzjc.dialoglib.model.DialogAnnotationModel;
 
+import java.lang.reflect.Field;
+
 /**
  * Created by Spark on 2016/7/4 16:28.
  */
 public abstract class BaseDialogFragment extends DialogFragment implements ICreateViewInterface {
 
     private DialogAnnotationModel model;
+    private Field mCalledField;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         model = new DialogAnnotationModel(this);
         setStyle(DialogFragment.STYLE_NORMAL, model.getStyle());
+
+        Field[] fields = Fragment.class.getDeclaredFields();
+        for (Field field : fields) {
+            if (TextUtils.equals(field.getName(), "mCalled")) {
+                mCalledField = field;
+                mCalledField.setAccessible(true);
+                return;
+            }
+        }
+
     }
 
     @NonNull
@@ -65,6 +80,10 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
     @Override
     public void onStart() {
         try {
+            if (mCalledField != null) {
+                mCalledField.set(this, true);
+            }
+
             Activity activity = getActivity();
             if (activity != null && activity instanceof ComponentActivity) {
                 LifecycleRegistry lifecycleRegistry = (LifecycleRegistry) ((ComponentActivity) activity).getLifecycle();
