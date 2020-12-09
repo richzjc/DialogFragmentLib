@@ -21,7 +21,9 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
 import androidx.lifecycle.OnLifecycleEvent;
 
@@ -86,7 +88,7 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
 
             Activity activity = getActivity();
             if (activity != null && activity instanceof ComponentActivity) {
-                LifecycleRegistry lifecycleRegistry = (LifecycleRegistry) ((ComponentActivity) activity).getLifecycle();
+                final LifecycleRegistry lifecycleRegistry = (LifecycleRegistry) ((ComponentActivity) activity).getLifecycle();
                 Lifecycle.State state = lifecycleRegistry.getCurrentState();
                 if (state == Lifecycle.State.DESTROYED || activity.isDestroyed() || activity.isFinishing())
                     return;
@@ -95,6 +97,18 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
                     realStart();
                 } else if (lifecycleRegistry instanceof BaseLifecycleRegistry && ((BaseLifecycleRegistry) lifecycleRegistry).smallerEvent(Lifecycle.Event.ON_PAUSE)) {
                     realStart();
+                }else{
+                    final LifecycleEventObserver observer = new LifecycleEventObserver() {
+                        @Override
+                        public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
+                            if(event == Lifecycle.Event.ON_RESUME){
+                                realStart();
+                                lifecycleRegistry.removeObserver(this);
+                            }
+                        }
+                    };
+
+                    lifecycleRegistry.addObserver(observer);
                 }
             }
         } catch (Exception e) {

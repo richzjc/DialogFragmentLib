@@ -1,5 +1,7 @@
 package com.richzjc.myapplication
 
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +17,10 @@ class MainActivity : AppCompatActivity() {
         val lifecycleRegistry = lifecycle as LifecycleRegistry
         val state = lifecycleRegistry.currentState
         Log.i("state", "oncreate : " + state.name)
+        val receiver = TestReceiver()
+        val filter = IntentFilter()
+        filter.addAction("android.intent.action.DATE_CHANGED")
+        registerReceiver(receiver, filter)
     }
 
     override fun onStart() {
