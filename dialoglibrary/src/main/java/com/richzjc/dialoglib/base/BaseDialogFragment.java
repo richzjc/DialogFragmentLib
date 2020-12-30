@@ -97,18 +97,8 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
                     realStart();
                 } else if (lifecycleRegistry instanceof BaseLifecycleRegistry && ((BaseLifecycleRegistry) lifecycleRegistry).smallerEvent(Lifecycle.Event.ON_PAUSE)) {
                     realStart();
-                }else{
-                    final LifecycleEventObserver observer = new LifecycleEventObserver() {
-                        @Override
-                        public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
-                            if(event == Lifecycle.Event.ON_RESUME){
-                                realStart();
-                                lifecycleRegistry.removeObserver(this);
-                            }
-                        }
-                    };
-
-                    lifecycleRegistry.addObserver(observer);
+                } else {
+                    return;
                 }
             }
         } catch (Exception e) {
