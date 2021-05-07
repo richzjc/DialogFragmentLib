@@ -96,7 +96,7 @@ public abstract class BaseDialogFragment extends DialogFragment implements ICrea
                 else if (state == Lifecycle.State.RESUMED) {
                     realStart();
                 } else if (lifecycleRegistry instanceof BaseLifecycleRegistry) {
-                    if (((BaseLifecycleRegistry) lifecycleRegistry).smallerEvent(Lifecycle.Event.ON_PAUSE))
+                    if (((BaseLifecycleRegistry) lifecycleRegistry).smallerEvent(Lifecycle.Event.ON_DESTROY))
                         realStart();
                 } else {
                     realStart();
